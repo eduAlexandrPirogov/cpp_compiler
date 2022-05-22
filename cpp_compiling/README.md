@@ -53,7 +53,7 @@ int res = a + b;
 ## Преобразование текста в машинный код
 
 Далее, на основе текста после препроцессинга, компилятор создает абстрактное синтаксическое дерево на основе которого будет создавать текст, состоящий из
-1. маашинных инструкций
+1. машинных инструкций
 2. констант
 
 Поэтапно это выглядит следующим образом:
@@ -68,19 +68,19 @@ int res = a + b;
 Выполнив команду `g++ -S plus.cpp -o plus.s` компилятор остановит свою работу после ассемблирования и результатом работы будет файл, содержащий ассемблерный код?
 
 ```assembly
-.file "plus.cpp"
-.text
-.globl _Z4plusii
-.type _Z4plusii, @function
+   .file "plus.cpp"
+   .text
+   .globl _Z4plusii
+   .type _Z4plusii, @function
 _Z4plusii:
-.LFB0:
-.cfi_startproc
+   .LFB0:
+   .cfi_startproc
 endbr64
 pushq %rbp
-.cfi_def_cfa_offset 16
-.cfi_offset 6, -16
+   .cfi_def_cfa_offset 16
+   .cfi_offset 6, -16
 movq %rsp, %rbp
-.cfi_def_cfa_register 6
+   .cfi_def_cfa_register 6
 movl %edi, -20(%rbp)
 movl %esi, -24(%rbp)
 movl -20(%rbp), %edx
@@ -89,32 +89,32 @@ addl %edx, %eax
 movl %eax, -4(%rbp)
 movl -4(%rbp), %eax
 popq %rbp
-.cfi_def_cfa 7, 8
+   .cfi_def_cfa 7, 8
 ret
-.cfi_endproc
-.LFE0:
-.size _Z4plusii, .-_Z4plusii
-.ident "GCC: (Ubuntu 11.2.0-19ubuntu1) 11.2.0"
-.section .note.GNU-stack,"",@progbits
-.section .note.gnu.property,"a"
-.align 8
-.long 1f - 0f
-.long 4f - 1f
-.long 5
+   .cfi_endproc
+   .LFE0:
+   .size _Z4plusii, .-_Z4plusii
+   .ident "GCC: (Ubuntu 11.2.0-19ubuntu1) 11.2.0"
+   .section .note.GNU-stack,"",@progbits
+   .section .note.gnu.property,"a"
+   .align 8
+   .long 1f - 0f
+   .long 4f - 1f
+   .long 5
 0:
 .string "GNU"
 1:
-.align 8
-.long 0xc0000002
-.long 3f - 2f
+   .align 8
+   .long 0xc0000002
+   .long 3f - 2f
 2:
-.long 0x3
+   .long 0x3
 3:
-.align 8
+   .align 8
 4:
 ```
 
-Стоит сказать, что в зависимости от написаного кода на C++ может и измениться ассемблерный код:
+Стоит сказать, что в зависимости от написаного кода на C++ может и измениться ассемблерный код.
 
 `plusv1.cpp`
 ```cpp
@@ -123,6 +123,53 @@ int plus(int a, int b)
 {
    return a + b;
 }
+```
+
+Преобразовав `plusv1.cpp` в ассемблерный код, получим:
+
+```assembly
+   .file "plusv1.cpp"
+   .text
+   .globl _Z4plusii
+   .type _Z4plusii, @function
+_Z4plusii:
+   .LFB0:
+   .cfi_startproc
+endbr64
+pushq %rbp
+   .cfi_def_cfa_offset 16
+   .cfi_offset 6, -16
+movq %rsp, %rbp
+   .cfi_def_cfa_register 6
+movl %edi, -4(%rbp)
+movl %esi, -8(%rbp)
+movl -4(%rbp), %edx
+movl -8(%rbp), %eax
+addl %edx, %eax
+popq %rbp
+   .cfi_def_cfa 7, 8
+ret
+   .cfi_endproc
+   .LFE0:
+   .size _Z4plusii, .-_Z4plusii
+   .ident "GCC: (Ubuntu 11.2.0-19ubuntu1) 11.2.0"
+   .section .note.GNU-stack,"",@progbits
+   .section .note.gnu.property,"a"
+   .align 8
+   .long 1f - 0f
+   .long 4f - 1f
+   .long 5
+0:
+   .string "GNU"
+1:
+   .align 8
+   .long 0xc0000002
+   .long 3f - 2f
+2:
+   .long 0x3
+3:
+   .align 8
+4:
 ```
 
 То есть, желательно создавать **оптимизированный** код.
