@@ -90,12 +90,83 @@ void Log(const char* message, int x)
 Линкер может столкнуться со следующими проблемами:
 1. undefined reference
 2. multiple references
+3. pragma once moments
 
 Undefined reference говорит, что линкер не может найти определения для некоторой сущности. Пример:
 
+Undefined reference
+
+`a.ii after preprocessing`
 ```cpp
+//a.h
+int a;
+void f();
+//a.cpp
+a = 10;
 ```
 
 
 ```cpp
+#include "a.h"
+
+void f();
+
+main()
+{
+   a = 20; // changes a which defined in a.cpp
+   f(); // linker error
+   return 0;
+};
 ```
+
+Посколкьу не имеется определения для функции **void f()**, линкер выдает ошибку типа **undefined reference**
+
+--------
+`Multiple reference`
+
+`multiple.h`
+```cpp
+void test()
+{};
+```
+
+`a.h`
+```cpp
+#include "multiple.h"
+```
+
+`b.h`
+```cpp
+#include "multiple.h"
+```
+
+`main.cpp`
+```cpp
+#include "a.h"
+#include "b.h"
+
+int main()
+{
+   test();
+};
+```
+
+Чтобы понять в чем тут загвоздка, посмотрим, как будет выглядеть `main.cpp` после компиляции:
+
+`main.ii`
+```cpp
+//#include "a.h"
+////a includes multiple.h
+void test(){};
+//#include "b.h"
+////b includes multiple.h too
+void test() {};
+
+
+int main()
+{
+   test();// linker doesn't know which one is needed
+};
+```
+
+
