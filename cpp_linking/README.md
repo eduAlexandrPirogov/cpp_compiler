@@ -92,9 +92,10 @@ void Log(const char* message, int x)
 2. multiple references
 3. pragma once moments
 
-Undefined reference говорит, что линкер не может найти определения для некоторой сущности. Пример:
 
-Undefined reference
+### Undefined reference
+
+Undefined reference говорит, что линкер не может найти определения для некоторой сущности. Пример:
 
 `a.ii after preprocessing`
 ```cpp
@@ -122,7 +123,7 @@ main()
 Посколкьу не имеется определения для функции **void f()**, линкер выдает ошибку типа **undefined reference**
 
 --------
-`Multiple reference`
+### `Multiple reference`
 
 `multiple.h`
 ```cpp
@@ -169,4 +170,9 @@ int main()
 };
 ```
 
+### pragma once moment
 
+Почти всегда в `*.h` файлах первой строкой можно увидеть инструкцию препроцессора **#pragma once**
+Данная инструкция говорит, что нужно включать данный заголовочный файл **единожды**, дабы не возникло **multiple reference**
+
+# Шаблоны
