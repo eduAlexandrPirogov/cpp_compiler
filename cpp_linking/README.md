@@ -176,3 +176,55 @@ int main()
 Данная инструкция говорит, что нужно включать данный заголовочный файл **единожды**, дабы не возникло **multiple reference**
 
 # Шаблоны
+
+Немного о шаблонах. Если мы создаем шаблон некого класса, то, как известно, нам нужно объявить определение шаблона в заголовочном файле.
+**Шаблоны -- это рецепт для компилятора, который будет в рантайме создавать нужный код**
+
+`Log.h`
+```cpp
+#pragma once
+#include <iostream>
+
+template <class T>
+class Logger
+{
+   public:
+      Logger();
+      void Log(T t);
+};
+
+template<class T>
+Logger<T>::Logger(){};
+
+template <class T>
+void Logger<T>::Log(T t)
+{
+   std::cout << t << '\n';
+};
+```
+
+Для каждого шаблона будет создана своя версия кода определения:
+
+```cpp
+#include "Log.h"
+
+int main()
+{
+   Logger<int> intLog{}; //compiler creates a class<int> Logger...
+   Logger<char> charLog{}; //compiler creates a class<char> Logger...
+   Logger<double> doubleLog{}; //compiler creates a class<double> Logger...
+
+   intLog.Log(2); //compiler creates a function<int> Log(int t)...
+   charLog.Log('a'); //compiler creates a function<char> Log(char t)...
+   doubleLog.Log(2.2); //compiler creates a function<double> Log(double t)...
+};
+```
+
+
+**Замечание**
+Если мы создаем специализацию шаблоны, то **мы должны объявить его определение явно**, поскольку:
+1. **шаблоны функции -- это не функция**
+2. **специализация шаблоны -- это функция**
+
+# Таблица символов
+TBD
