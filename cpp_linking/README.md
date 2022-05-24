@@ -166,7 +166,7 @@ void test() {};
 
 int main()
 {
-   test();// linker doesn't know which one is needed
+   test();// doesn't know which one is needed
 };
 ```
 
